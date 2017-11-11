@@ -122,43 +122,136 @@ public class Controller  {
         textField2.setText("");
         System.out.println(actionEvent.getTarget());
         char str[]=actionEvent.getTarget().toString().toCharArray();
-        state=Character.toString(str[str.length-2]);
+        stateBin=Character.toString(str[str.length-2]);
 
     }
 
     public void resultBin(ActionEvent actionEvent) {
-        String resul="";
+        String resultBin="";
         bBin=textField2.getText();
         switch (stateBin){
-            case "*" :
+            case "+" :
                 char aArray[]=aBin.toCharArray();
                 char bArray[]=bBin.toCharArray();
-                int len;
                 if(aArray.length<bArray.length){
-                    len=bArray.length-1;
                 }
+                //Если первый массив больше второго
                 else if(aArray.length>bArray.length){
-                    len=aArray.length-1;
-                }
-                else{
-                    len=aArray.length-1;
-                }
-                for(int i=0; i<len; i++ ){
-                    char k=aArray[aArray.length-i];
-                    char l=aArray[aArray.length-i];
-                    if(k==0 && l==0 ){
+                    boolean tmp =false;
+                    for(int i=0; i<bArray.length; i++ ){
+                        char k=aArray[(aArray.length-1)-i];
+                        char l=bArray[(bArray.length-1)-i];
+                        if((l == '0') && (k == '0')){
+                            if(tmp){
+                                resultBin+="1";
+                                tmp=false;
+                            }
+                            else{
+                                resultBin+="0";
+                            }
 
+                        }
+                        else if(k=='0' && l=='1' || k=='1' && l=='0' ){
+                            if(tmp){
+                                resultBin+="0";
+                                tmp=true;
+                            }
+                            else {
+                                resultBin += "1";
+                            }
+                        }
+                        else if(k=='1' && l=='1' ){
+                            if(tmp){
+                                resultBin += "1";
+                            }
+                            else{
+                                resultBin += "0";
+                            }
+                            tmp=true;
+
+
+                        }
+                        else {
+                            resultBin+="Ошибка";
+                        }
+                    }
+                    for(int i=0;i<aArray.length-bArray.length; i++){
+                        System.out.println("Второй цикл "+resultBin);
+                        if(tmp){
+                            char k=aArray[aArray.length-bArray.length-i];
+                            if(k=='1'){
+                                resultBin+="01";
+                            }
+                            else{
+                                resultBin+="1";
+                                tmp=false;
+                            }
+                        }
+                        else{
+                            resultBin+=aArray[aArray.length-bArray.length-i];
+                        }
+                    }
+                }
+                //Если массивы равны
+                else{
+                    boolean tmp =false;
+                    for(int i=0; i<aArray.length; i++ ){
+                        char k=aArray[(aArray.length-1)-i];
+                        char l=bArray[(bArray.length-1)-i];
+                        if((l == '0') && (k == '0')){
+                            if(tmp){
+                                resultBin+="1";
+                                tmp=false;
+                            }
+                            else{
+                                resultBin+="0";
+                            }
+
+                        }
+                        else if(k=='0' && l=='1' || k=='1' && l=='0' ){
+                            if(tmp){
+                                resultBin+="0";
+                                tmp=true;
+                            }
+                            else {
+                                resultBin += "1";
+                            }
+                        }
+                        else if(k=='1' && l=='1' ){
+                            if(tmp){
+                                resultBin += "1";
+                            }
+                            else{
+                                resultBin += "0";
+                            }
+                            tmp=true;
+
+
+                        }
+                        else {
+                            resultBin+="Ошибка";
+                        }
+                    }
+                    if(tmp){
+                        resultBin+="1";
+                        tmp=false;
                     }
                 }
 
-                break;
-            case "/" :
-                dele(a,b);
-                break;
-            case "+" :
-                plus(a,b);
+                System.out.println("Результать = "+resultBin);
+                String buffer="";
+                for(int i=0; i<resultBin.toCharArray().length; i++){
+                    buffer+=resultBin.toCharArray()[resultBin.toCharArray().length-1-i];
+                }
+                textField2.setText(buffer);
                 break;
             case "-" :
+                dele(a,b);
+                break;
+            case "*" :
+                plus(a,b);
+                break;
+            case "/" :
                 minus(a,b);
                 break;
 
