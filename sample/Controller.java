@@ -1,24 +1,14 @@
 package sample;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-
 
 public class Controller  {
 
     public TextField textField;
-    public double a;
-    public double b;
+    public String a="0";
+    public String b="0";
+    double res=0;
     public String state="0";
 
     public TextField textField2;
@@ -26,48 +16,532 @@ public class Controller  {
     public String bBin;
     public String stateBin="0";
 
-    public void multiplition(double i, double j){
-        double res=i*j;
+    public String clearotnol(String str){
+        boolean flag=true;
+        String tmpRe = "";
+        for(int i=0; i<str.length(); i++){
+            if(flag) {
+                if(str.charAt(i)=='1') {
+                    tmpRe += String.valueOf(str.charAt(i));
+                    flag=false;
+                }
+            }
+            else{
+                tmpRe += String.valueOf(str.charAt(i));
+            }
+        }
+        return tmpRe;
+    }
+
+    public String obratnyi(String str){
+        String tmpStr="";
+        for(int i=0; i<str.toCharArray().length; i++){
+            tmpStr+=str.toCharArray()[str.toCharArray().length-1-i];
+        }
+        return tmpStr;
+    }
+
+    public void multiplition(String i, String j){
+        double mi=Double.valueOf(a);
+        double mj=Double.valueOf(b);
+        res=mi*mj;
+        a=String.valueOf(res);
+        b="0";
+        state="0";
         textField.setText(String.valueOf(res));
     }
-    public void dele(double i, double j){
-        double res=i/j;
+    public void dele(String i, String j){
+        double di=Double.valueOf(a);
+        double dj=Double.valueOf(b);
+        res=di/dj;
+        a=String.valueOf(res);
+        b="0";
+        state="0";
         textField.setText(String.valueOf(res));
     }
-    public void minus(double i, double j){
-        double res=i-j;
+    public void minus(String i, String j){
+        double im=Double.valueOf(a);
+        double jm=Double.valueOf(b);
+        res=im-jm;
+        a=String.valueOf(res);
+        b="0";
+        state="0";
         textField.setText(String.valueOf(res));
     }
-    public void plus(double i, double j){
-        double res=i+j;
+    public void plus(String aa, String bb){
+        double i=Double.valueOf(aa);
+        double j=Double.valueOf(bb);
+        res=i+j;
+        a=String.valueOf(res);
+        b="0";
+        state="0";
         textField.setText(String.valueOf(res));
     }
-    public void N(ActionEvent actionEvent) {
-        System.out.println(actionEvent.getTarget());
-        char str[]=actionEvent.getTarget().toString().toCharArray();
-        System.out.println(str[str.length-2]);
-        if(state=="0"){
-            textField.setText(textField.getText()+Character.toString(str[str.length-2]));
+    //функции двоичнего калькулятора
+    //умножения
+    public String BinMulti(char[] mass,char b){
+        System.out.print("Функция BinMultu: ");
+        String tmpRe="";
+        for(int i=0;i<mass.length; i++){
+            char a=mass[mass.length-1-i];
+            if(a=='0' && b=='0'){
+                tmpRe+='0';
+            }
+            else if(a=='1' && b=='1'){
+                tmpRe+='1';
+            }
+            else{
+                tmpRe+=0;
+            }
+
+            System.out.print(mass[i]);
+        }
+        System.out.println("*"+b+" = "+obratnyi(tmpRe));
+        return obratnyi(tmpRe);
+    }
+    // Сложения
+    public String BinPlus(char[] aArray,char[] bArray){
+
+        //TEST
+        System.out.print("Функция BinPlus: ");
+        for(int i=0;i<aArray.length;i++){
+            System.out.print(aArray[i]);
+        }
+        System.out.print(" + ");
+        for(int i=0;i<bArray.length;i++){
+            System.out.print(bArray[i]);
+        }
+        //TEST
+
+        String tmpresultBin="";
+        //Если второй массив больше
+        if(aArray.length<bArray.length){
+            boolean tmp =false;
+            for(int i=0; i<aArray.length; i++ ){
+                char k=aArray[(aArray.length-1)-i];
+                char l=bArray[(bArray.length-1)-i];
+                if((l == '0') && (k == '0')){
+                    if(tmp){
+                        tmpresultBin+="1";
+                        tmp=false;
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+
+                }
+                else if(k=='0' && l=='1' || k=='1' && l=='0' ){
+                    if(tmp){
+                        tmpresultBin+="0";
+                        tmp=true;
+                    }
+                    else {
+                        tmpresultBin += "1";
+                    }
+                }
+                else if(k=='1' && l=='1' ){
+                    if(tmp){
+                        tmpresultBin += "1";
+                    }
+                    else{
+                        tmpresultBin += "0";
+                    }
+                    tmp=true;
+
+
+                }
+                else {
+                    tmpresultBin+="Ошибка";
+                }
+            }
+            for(int i=0;i<bArray.length-aArray.length; i++){
+                if(tmp){
+                    char k=bArray[bArray.length-aArray.length-i];
+                    if(k=='1'){
+                        tmpresultBin+="01";
+                    }
+                    else{
+                        tmpresultBin+="1";
+                        tmp=false;
+                    }
+                }
+                else{
+                    tmpresultBin+=bArray[bArray.length-aArray.length-i];
+                }
+            }
+
+        }
+        //Если первый массив больше второго
+        else if(aArray.length>bArray.length){
+            boolean tmp =false;
+            for(int i=0; i<bArray.length; i++ ){
+                char k=aArray[(aArray.length-1)-i];
+                char l=bArray[(bArray.length-1)-i];
+                if((l == '0') && (k == '0')){
+                    if(tmp){
+                        tmpresultBin+="1";
+                        tmp=false;
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+
+                }
+                else if(k=='0' && l=='1' || k=='1' && l=='0' ){
+                    if(tmp){
+                        tmpresultBin+="0";
+                        tmp=true;
+                    }
+                    else {
+                        tmpresultBin += "1";
+                    }
+                }
+                else if(k=='1' && l=='1' ){
+                    if(tmp){
+                        tmpresultBin += "1";
+                    }
+                    else{
+                        tmpresultBin += "0";
+                    }
+                    tmp=true;
+
+
+                }
+                else {
+                    tmpresultBin+="Ошибка";
+                }
+            }
+            for(int i=0;i<aArray.length-bArray.length; i++){
+                if(tmp){
+                    char k=aArray[aArray.length-bArray.length-i];
+                    if(k=='1'){
+                        tmpresultBin+="01";
+                    }
+                    else{
+                        tmpresultBin+="1";
+                        tmp=false;
+                    }
+                }
+                else{
+                    tmpresultBin+=aArray[aArray.length-bArray.length-i];
+                }
+            }
+        }
+        //Если массивы равны
+        else{
+            boolean tmp =false;
+            for(int i=0; i<aArray.length; i++ ){
+                char k=aArray[(aArray.length-1)-i];
+                char l=bArray[(bArray.length-1)-i];
+                if((l == '0') && (k == '0')){
+                    if(tmp){
+                        tmpresultBin+="1";
+                        tmp=false;
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+
+                }
+                else if(k=='0' && l=='1' || k=='1' && l=='0' ){
+                    if(tmp){
+                        tmpresultBin+="0";
+                        tmp=true;
+                    }
+                    else {
+                        tmpresultBin += "1";
+                    }
+                }
+                else if(k=='1' && l=='1' ){
+                    if(tmp){
+                        tmpresultBin += "1";
+                    }
+                    else{
+                        tmpresultBin += "0";
+                    }
+                    tmp=true;
+
+
+                }
+                else {
+                    tmpresultBin+="Ошибка";
+                }
+            }
+            if(tmp){
+                tmpresultBin+="1";
+                tmp=false;
+            }
+        }
+        System.out.println(" = "+obratnyi(tmpresultBin));
+        return obratnyi(tmpresultBin);
+    }
+
+    //Вычитания
+    public String BinMinus(char[] aArray,char[] bArray){
+
+        //TEST
+        System.out.print("Функция BinMinus: ");
+        for(int i=0;i<aArray.length;i++){
+            System.out.print(aArray[i]);
+        }
+        System.out.print(" + ");
+        for(int i=0;i<bArray.length;i++){
+            System.out.print(bArray[i]);
+        }
+        //TEST
+        String tmpresultBin="";
+        if(aArray.length>bArray.length){
+            boolean tmp =false;
+            for(int i=0; i<bArray.length; i++ ){
+                char k=aArray[(aArray.length-1)-i];
+                char l=bArray[(bArray.length-1)-i];
+                if((l == '0') && (k == '0')){
+                    if(tmp){
+                        tmpresultBin+="1";
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+
+                }
+                else if(k=='0' && l=='1'){
+                    if(tmp){
+                        tmpresultBin+="0";
+                    }
+                    else {
+                        tmpresultBin += "1";
+                        tmp=true;
+                    }
+                }
+                else if(k=='1' && l=='0'){
+                    if(tmp){
+                        tmpresultBin+="0";
+                        tmp=false;
+                    }
+                    else {
+                        tmpresultBin += "1";
+                    }
+                }
+                else if(k=='1' && l=='1' ){
+                    if(tmp){
+                        tmpresultBin += "1";
+                        tmp=true;
+                    }
+                    else{
+                        tmpresultBin += "0";
+                    }
+                }
+                else {
+                    tmpresultBin+="Ошибка";
+                }
+            }
+            for(int i=0;i<aArray.length-bArray.length; i++){
+                if(tmp){
+                    char k=aArray[aArray.length-bArray.length-i];
+                    if(k=='1'){
+                        tmpresultBin+="0";
+                        tmp=false;
+                    }
+                    else{
+                        tmpresultBin+="0";
+                        tmp=true;
+                    }
+                }
+                else{
+                    char k=aArray[aArray.length-bArray.length-i];
+                    if(k=='1'){
+                        tmpresultBin+="1";
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+                }
+            }
+        }
+        //если второй массив больше чем первый
+        else if(aArray.length<bArray.length){
+            boolean tmp =false;
+            for(int i=0; i<aArray.length; i++ ){
+                char l=aArray[(aArray.length-1)-i];
+                char k=bArray[(bArray.length-1)-i];
+                if((l == '0') && (k == '0')){
+                    if(tmp){
+                        tmpresultBin+="1";
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+
+                }
+                else if(k=='0' && l=='1'){
+                    if(tmp){
+                        tmpresultBin+="0";
+                    }
+                    else {
+                        tmpresultBin += "1";
+                        tmp=true;
+                    }
+                }
+                else if(k=='1' && l=='0'){
+                    if(tmp){
+                        tmpresultBin+="0";
+                        tmp=false;
+                    }
+                    else {
+                        tmpresultBin += "1";
+                    }
+                }
+                else if(k=='1' && l=='1' ){
+                    if(tmp){
+                        tmpresultBin += "1";
+                        tmp=true;
+                    }
+                    else{
+                        tmpresultBin += "0";
+                    }
+                }
+                else {
+                    tmpresultBin+="Ошибка";
+                }
+            }
+            for(int i=0;i<bArray.length-aArray.length; i++){
+                if(tmp){
+                    char k=bArray[bArray.length-aArray.length-i];
+                    if(k=='1'){
+                        tmpresultBin+="0";
+                        tmp=false;
+                    }
+                    else{
+                        tmpresultBin+="0";
+                        tmp=true;
+                    }
+                }
+                else{
+                    char k=bArray[bArray.length-aArray.length-i];
+                    if(k=='1'){
+                        tmpresultBin+="1";
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+                }
+            }
+            tmpresultBin+="-";
+        }
+        else if(aArray.length==bArray.length){
+            boolean tmp =false;
+            for(int i=0; i<bArray.length; i++ ){
+                char k=aArray[(aArray.length-1)-i];
+                char l=bArray[(bArray.length-1)-i];
+                if((l == '0') && (k == '0')){
+                    if(tmp){
+                        tmpresultBin+="1";
+                    }
+                    else{
+                        tmpresultBin+="0";
+                    }
+
+                }
+                else if(k=='0' && l=='1'){
+                    if(tmp){
+                        tmpresultBin+="0";
+                    }
+                    else {
+                        tmpresultBin += "1";
+                        tmp=true;
+                    }
+                }
+                else if(k=='1' && l=='0'){
+                    if(tmp){
+                        tmpresultBin+="0";
+                        tmp=false;
+                    }
+                    else {
+                        tmpresultBin += "1";
+                    }
+                }
+                else if(k=='1' && l=='1' ){
+                    if(tmp){
+                        tmpresultBin += "1";
+                        tmp=true;
+                    }
+                    else{
+                        tmpresultBin += "0";
+                    }
+                }
+                else {
+                    tmpresultBin+="Ошибка";
+                }
+            }
         }
         else{
-            textField.setText(textField.getText()+Character.toString(str[str.length-2]));
+            System.out.println("Ошибка при вычислении");
         }
+        System.out.println(" = "+tmpresultBin);
+        return obratnyi(tmpresultBin);
+    }
 
+    //Полное умножение
+    public String BinMulti_2(char[] aArray,char[] bArray){
+        String tmp="";
+        int razryad=1;
+        for(int i=0;i<bArray.length;i++){
+            if(tmp==""){
+                tmp=BinMulti(aArray,bArray[bArray.length-1-i]);
+            }
+            else{
+                String tmp2=BinMulti(aArray,bArray[bArray.length-1-i]);
+                String tmp3;
+                for(int j=0; j<razryad;j++){
+                    tmp2+="0";
+                }
+                tmp3=BinPlus(tmp.toCharArray(), tmp2.toCharArray());
+                razryad++;
+                tmp=tmp3;
+            }
+        }
+        return tmp;
+    }
+
+
+
+
+
+    public void N(ActionEvent actionEvent) {
+        char str[]=actionEvent.getTarget().toString().toCharArray();
+
+        if(state=="0"){
+            if(res!=0){
+                textField.setText("");
+                res=0;
+                a="0";
+                b="0";
+            }
+            a+=str[str.length-2];
+        }
+        else{
+            b+=str[str.length-2];
+        }
+        textField.setText(textField.getText()+Character.toString(str[str.length-2]));
     }
 
     public void oper(ActionEvent actionEvent) {
-        a=Double.valueOf(textField.getText());
-        textField.setText("");
-        System.out.println(actionEvent.getTarget());
-        char str[]=actionEvent.getTarget().toString().toCharArray();
-        state=Character.toString(str[str.length-2]);
-    }
+        char str[] = actionEvent.getTarget().toString().toCharArray();
+        if(b!="0"){
+            result();
+            state=Character.toString(str[str.length - 2]);
+            textField.setText(textField.getText() + state);
+        }
+        else {
+            state = Character.toString(str[str.length - 2]);
+            textField.setText(textField.getText() + state);
+        }
 
-    public void result(ActionEvent actionEvent) {
-        b=Double.valueOf(textField.getText());
+    }
+    public void result() {
         switch (state){
             case "*" :
-                multiplition(a,5);
+                multiplition(a,b);
                 break;
             case "/" :
                 dele(a,b);
@@ -85,6 +559,9 @@ public class Controller  {
     public void clear(ActionEvent actionEvent) {
 
         textField.setText("");
+        a="0";
+        b="0";
+        state="0";
     }
 
     public void portal(ActionEvent actionEvent) {
@@ -129,132 +606,61 @@ public class Controller  {
     public void resultBin(ActionEvent actionEvent) {
         String resultBin="";
         bBin=textField2.getText();
+        char aArray[]=aBin.toCharArray();
+        char bArray[]=bBin.toCharArray();
+        aBin="";
+        bBin="";
+        String buffer="";
         switch (stateBin){
+            //Сложения
             case "+" :
-                char aArray[]=aBin.toCharArray();
-                char bArray[]=bBin.toCharArray();
-                if(aArray.length<bArray.length){
-                }
-                //Если первый массив больше второго
-                else if(aArray.length>bArray.length){
-                    boolean tmp =false;
-                    for(int i=0; i<bArray.length; i++ ){
-                        char k=aArray[(aArray.length-1)-i];
-                        char l=bArray[(bArray.length-1)-i];
-                        if((l == '0') && (k == '0')){
-                            if(tmp){
-                                resultBin+="1";
-                                tmp=false;
-                            }
-                            else{
-                                resultBin+="0";
-                            }
-
-                        }
-                        else if(k=='0' && l=='1' || k=='1' && l=='0' ){
-                            if(tmp){
-                                resultBin+="0";
-                                tmp=true;
-                            }
-                            else {
-                                resultBin += "1";
-                            }
-                        }
-                        else if(k=='1' && l=='1' ){
-                            if(tmp){
-                                resultBin += "1";
-                            }
-                            else{
-                                resultBin += "0";
-                            }
-                            tmp=true;
-
-
-                        }
-                        else {
-                            resultBin+="Ошибка";
-                        }
-                    }
-                    for(int i=0;i<aArray.length-bArray.length; i++){
-                        System.out.println("Второй цикл "+resultBin);
-                        if(tmp){
-                            char k=aArray[aArray.length-bArray.length-i];
-                            if(k=='1'){
-                                resultBin+="01";
-                            }
-                            else{
-                                resultBin+="1";
-                                tmp=false;
-                            }
-                        }
-                        else{
-                            resultBin+=aArray[aArray.length-bArray.length-i];
-                        }
-                    }
-                }
-                //Если массивы равны
-                else{
-                    boolean tmp =false;
-                    for(int i=0; i<aArray.length; i++ ){
-                        char k=aArray[(aArray.length-1)-i];
-                        char l=bArray[(bArray.length-1)-i];
-                        if((l == '0') && (k == '0')){
-                            if(tmp){
-                                resultBin+="1";
-                                tmp=false;
-                            }
-                            else{
-                                resultBin+="0";
-                            }
-
-                        }
-                        else if(k=='0' && l=='1' || k=='1' && l=='0' ){
-                            if(tmp){
-                                resultBin+="0";
-                                tmp=true;
-                            }
-                            else {
-                                resultBin += "1";
-                            }
-                        }
-                        else if(k=='1' && l=='1' ){
-                            if(tmp){
-                                resultBin += "1";
-                            }
-                            else{
-                                resultBin += "0";
-                            }
-                            tmp=true;
-
-
-                        }
-                        else {
-                            resultBin+="Ошибка";
-                        }
-                    }
-                    if(tmp){
-                        resultBin+="1";
-                        tmp=false;
-                    }
-                }
-
-                System.out.println("Результать = "+resultBin);
-                String buffer="";
-                for(int i=0; i<resultBin.toCharArray().length; i++){
-                    buffer+=resultBin.toCharArray()[resultBin.toCharArray().length-1-i];
-                }
-                textField2.setText(buffer);
+                textField2.setText(BinPlus(aArray,bArray));
                 break;
+            //Вычитания
             case "-" :
-                dele(a,b);
+                textField2.setText(BinMinus(aArray,bArray));
                 break;
             case "*" :
-                plus(a,b);
+                textField2.setText(BinMulti_2(aArray,bArray));
                 break;
             case "/" :
-                minus(a,b);
+                //деление
+                String result="";
+                int f=0, k=0, g;
+                for(int i=0; i<aArray.length; i++){
+
+                    f+=Integer.valueOf(String.valueOf(aArray[i]))*(Math.pow(2,Integer.valueOf(aArray.length-1-i)));
+                }
+                for(int i=0; i<bArray.length; i++){
+
+                    k+=Integer.valueOf(String.valueOf(bArray[i]))*(Math.pow(2,Integer.valueOf(bArray.length-1-i)));
+                }
+                g=f/k;
+                System.out.println(f+"/"+k+" = "+g);
+                boolean flag=true;
+                while (flag){
+                    if(g>=2){
+                        result+=String.valueOf(g%2);
+                        System.out.println(result);
+                        g=g/2;
+                    }
+                    else{
+                        flag=false;
+                        result+="1";
+                    }
+                }
+                textField2.setText(obratnyi(result));
+
                 break;
 
         }
+        stateBin="0";
     }
+    public void clearBin(ActionEvent actionEvent) {
+        textField2.setText("");
+        aBin="";
+        bBin="";
+        stateBin="";
+    }
+
 }

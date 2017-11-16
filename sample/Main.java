@@ -1,9 +1,9 @@
 package sample;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.application.Application; //главный класс fx приложения
+import javafx.fxml.FXMLLoader; // класс для загрузки xml
+import javafx.scene.Parent; // корневой узел
+import javafx.scene.Scene; // хранилище для контента
 import javafx.stage.Stage;
 
 
@@ -11,7 +11,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-    launch(args);
+        launch(args);
 
     }
 
@@ -23,7 +23,4 @@ public class Main extends Application {
         primaryStage.setScene(normal);
         primaryStage.show();
     }
-
-
-
 }

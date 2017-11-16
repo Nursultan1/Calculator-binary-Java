@@ -17,8 +17,6 @@
                           <TextField fx:id="textField" layoutX="14.0" layoutY="30.0" prefHeight="28.0" prefWidth="215.0" />
                           <Pane layoutX="24.0" layoutY="64.0" prefHeight="173.0" prefWidth="200.0">
                               <children>
-                                  <Button layoutY="14.0" mnemonicParsing="false" onAction="#portal" prefHeight="25.0" prefWidth="41.0" text="Button" />
-                                  <Button layoutX="52.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="Button" />
                                   <Button layoutX="108.0" layoutY="14.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="41.0" text="c" />
                                   <Button layoutX="160.0" layoutY="14.0" mnemonicParsing="false" onAction="#oper" prefHeight="25.0" prefWidth="41.0" text="/" />
                                   <Button layoutY="51.0" mnemonicParsing="false" onAction="#N" prefHeight="25.0" prefWidth="41.0" text="7" />
@@ -52,12 +50,12 @@
                            <children>
                               <Button layoutY="14.0" mnemonicParsing="false" onAction="#numbe" text="0" />
                               <Button layoutX="50.0" layoutY="15.0" mnemonicParsing="false" onAction="#numbe" text="1" />
-                              <Button layoutX="181.0" layoutY="2.0" mnemonicParsing="false" onAction="#opertionBinary" text="/" />
                               <Button layoutX="180.0" layoutY="39.0" mnemonicParsing="false" onAction="#opertionBinary" text="*" />
                               <Button layoutX="181.0" layoutY="75.0" mnemonicParsing="false" onAction="#opertionBinary" text="-" />
                               <Button layoutX="178.0" layoutY="111.0" mnemonicParsing="false" onAction="#opertionBinary" text="+" />
                               <Button layoutX="178.0" layoutY="152.0" mnemonicParsing="false" onAction="#resultBin" text="=" />
-                              <Button layoutX="90.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="67.0" text="C" />
+                              <Button layoutX="90.0" layoutY="14.0" mnemonicParsing="false" onAction="#clearBin" prefHeight="25.0" prefWidth="67.0" text="C" />
+                              <Button layoutX="181.0" layoutY="14.0" mnemonicParsing="false" onAction="#opertionBinary" text="/" />
                            </children>
                         </Pane>
                      </children>
