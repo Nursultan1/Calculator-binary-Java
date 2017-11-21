@@ -1,13 +1,14 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 public class Controller  {
 
     public TextField textField;
     public String a="0";
     public String b="0";
+    public Label error1;
     double res=0;
     public String state="0";
 
@@ -482,7 +483,7 @@ public class Controller  {
     }
 
     //Полное умножение
-    public String BinMulti_2(char[] aArray,char[] bArray){
+    public String BinMulti(char[] aArray,char[] bArray){
         String tmp="";
         int razryad=1;
         for(int i=0;i<bArray.length;i++){
@@ -505,31 +506,30 @@ public class Controller  {
 
 
 
-
-
     public void N(ActionEvent actionEvent) {
         char str[]=actionEvent.getTarget().toString().toCharArray();
-
-        if(state=="0"){
-            if(res!=0){
-                textField.setText("");
-                res=0;
-                a="0";
-                b="0";
+        if(textField.getText().length()<30) {
+            if (state == "0") {
+                if (res != 0) {
+                    textField.setText("");
+                    res = 0;
+                    a = "0";
+                    b = "0";
+                }
+                a += str[str.length - 2];
             }
-            a+=str[str.length-2];
+            else {
+                b += str[str.length - 2];
+            }
+            textField.setText(textField.getText() + Character.toString(str[str.length - 2]));
         }
-        else{
-            b+=str[str.length-2];
-        }
-        textField.setText(textField.getText()+Character.toString(str[str.length-2]));
     }
 
     public void oper(ActionEvent actionEvent) {
         char str[] = actionEvent.getTarget().toString().toCharArray();
         if(b!="0"){
             result();
-            state=Character.toString(str[str.length - 2]);
+            state = Character.toString(str[str.length - 2]);
             textField.setText(textField.getText() + state);
         }
         else {
@@ -564,20 +564,7 @@ public class Controller  {
         state="0";
     }
 
-    public void portal(ActionEvent actionEvent) {
-        System.out.print("fvfdvf");
-    }
 
-
-//    public void portal(ActionEvent actionEvent) throws IOException {
-//        Stage primaryStage = new Stage();
-//        Parent root;
-//        root = FXMLLoader.load(getClass().getResource("binary.fxml"));
-//        Scene normal=new Scene(root, 300, 275);
-//        primaryStage.setScene(normal);
-//        primaryStage.show();
-//
-//    }
 
     //Binary Calculator
 
@@ -604,13 +591,11 @@ public class Controller  {
     }
 
     public void resultBin(ActionEvent actionEvent) {
-        String resultBin="";
         bBin=textField2.getText();
         char aArray[]=aBin.toCharArray();
         char bArray[]=bBin.toCharArray();
         aBin="";
         bBin="";
-        String buffer="";
         switch (stateBin){
             //Сложения
             case "+" :
@@ -621,36 +606,34 @@ public class Controller  {
                 textField2.setText(BinMinus(aArray,bArray));
                 break;
             case "*" :
-                textField2.setText(BinMulti_2(aArray,bArray));
+                textField2.setText(BinMulti(aArray,bArray));
                 break;
             case "/" :
                 //деление
-                String result="";
-                int f=0, k=0, g;
-                for(int i=0; i<aArray.length; i++){
+                String result = "";
+                int f = 0, k = 0, g;
+                for (int i = 0; i < aArray.length; i++) {
 
-                    f+=Integer.valueOf(String.valueOf(aArray[i]))*(Math.pow(2,Integer.valueOf(aArray.length-1-i)));
+                    f += Integer.valueOf(String.valueOf(aArray[i])) * (Math.pow(2, Integer.valueOf(aArray.length - 1 - i)));
                 }
-                for(int i=0; i<bArray.length; i++){
+                for (int i = 0; i < bArray.length; i++) {
 
-                    k+=Integer.valueOf(String.valueOf(bArray[i]))*(Math.pow(2,Integer.valueOf(bArray.length-1-i)));
+                    k += Integer.valueOf(String.valueOf(bArray[i])) * (Math.pow(2, Integer.valueOf(bArray.length - 1 - i)));
                 }
-                g=f/k;
-                System.out.println(f+"/"+k+" = "+g);
-                boolean flag=true;
-                while (flag){
-                    if(g>=2){
-                        result+=String.valueOf(g%2);
+                g = f / k;
+                System.out.println(f + "/" + k + " = " + g);
+                boolean flag = true;
+                while (flag) {
+                    if (g >= 2) {
+                        result += String.valueOf(g % 2);
                         System.out.println(result);
-                        g=g/2;
-                    }
-                    else{
-                        flag=false;
-                        result+="1";
+                        g = g / 2;
+                    } else {
+                        flag = false;
+                        result += "1";
                     }
                 }
-                textField2.setText(obratnyi(result));
-
+                textField2.setText(clearotnol(obratnyi(result)));
                 break;
 
         }
