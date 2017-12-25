@@ -3,20 +3,72 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 public class Controller  {
 
     public TextField textField;
-    public String a="0";
-    public String b="0";
+    public String a="";
+    public String b="";
     public Label error1;
     double res=0;
-    public String state="0";
+    public String state="";
 
+    //для двоичного калькулятора
     public TextField textField2;
-    public String aBin;
-    public String bBin;
-    public String stateBin="0";
+    public String aBin="";
+    public String bBin="";
+    public String stateBin="";
+    double resBin=0;
 
+    //функция  обычного калькулятора
+    public void multiplition(String i, String j){
+        double mi=Double.valueOf(a);
+        double mj=Double.valueOf(b);
+        res=mi*mj;
+        a=String.valueOf(res);
+        b="";
+        state="";
+        textField.setText(String.valueOf(res));
+    }
+    public void dele(String i, String j){
+        double di=Double.valueOf(a);
+        double dj=Double.valueOf(b);
+        res=di/dj;
+        a=String.valueOf(res);
+        b="";
+        state="";
+        textField.setText(String.valueOf(res));
+    }
+    public void minus(String i, String j){
+        double im=Double.valueOf(a);
+        double jm=Double.valueOf(b);
+        res=im-jm;
+        a=String.valueOf(res);
+        b="";
+        state="";
+        textField.setText(String.valueOf(res));
+    }
+    public void plus(String aa, String bb){
+        double i=Double.valueOf(aa);
+        double j=Double.valueOf(bb);
+        res=i+j;
+        a=String.valueOf(res);
+        b="";
+        state="";
+        textField.setText(String.valueOf(res));
+    }
+
+
+    //функции двоичнего калькулятора
+    //переварачивает строку
+    public String obratnyi(String str){
+        String tmpStr="";
+        for(int i=0; i<str.toCharArray().length; i++){
+            tmpStr+=str.toCharArray()[str.toCharArray().length-1-i];
+        }
+        return tmpStr;
+    }
+    //функция для очищения двоичных чисел от не значимых нулей
     public String clearotnol(String str){
         boolean flag=true;
         String tmpRe = "";
@@ -33,52 +85,6 @@ public class Controller  {
         }
         return tmpRe;
     }
-
-    public String obratnyi(String str){
-        String tmpStr="";
-        for(int i=0; i<str.toCharArray().length; i++){
-            tmpStr+=str.toCharArray()[str.toCharArray().length-1-i];
-        }
-        return tmpStr;
-    }
-
-    public void multiplition(String i, String j){
-        double mi=Double.valueOf(a);
-        double mj=Double.valueOf(b);
-        res=mi*mj;
-        a=String.valueOf(res);
-        b="0";
-        state="0";
-        textField.setText(String.valueOf(res));
-    }
-    public void dele(String i, String j){
-        double di=Double.valueOf(a);
-        double dj=Double.valueOf(b);
-        res=di/dj;
-        a=String.valueOf(res);
-        b="0";
-        state="0";
-        textField.setText(String.valueOf(res));
-    }
-    public void minus(String i, String j){
-        double im=Double.valueOf(a);
-        double jm=Double.valueOf(b);
-        res=im-jm;
-        a=String.valueOf(res);
-        b="0";
-        state="0";
-        textField.setText(String.valueOf(res));
-    }
-    public void plus(String aa, String bb){
-        double i=Double.valueOf(aa);
-        double j=Double.valueOf(bb);
-        res=i+j;
-        a=String.valueOf(res);
-        b="0";
-        state="0";
-        textField.setText(String.valueOf(res));
-    }
-    //функции двоичнего калькулятора
     //умножения
     public String BinMulti(char[] mass,char b){
         System.out.print("Функция BinMultu: ");
@@ -276,7 +282,6 @@ public class Controller  {
         System.out.println(" = "+obratnyi(tmpresultBin));
         return obratnyi(tmpresultBin);
     }
-
     //Вычитания
     public String BinMinus(char[] aArray,char[] bArray){
 
@@ -481,7 +486,6 @@ public class Controller  {
         System.out.println(" = "+tmpresultBin);
         return obratnyi(tmpresultBin);
     }
-
     //Полное умножение
     public String BinMulti(char[] aArray,char[] bArray){
         String tmp="";
@@ -509,12 +513,12 @@ public class Controller  {
     public void N(ActionEvent actionEvent) {
         char str[]=actionEvent.getTarget().toString().toCharArray();
         if(textField.getText().length()<30) {
-            if (state == "0") {
+            if (state == "") {
                 if (res != 0) {
                     textField.setText("");
                     res = 0;
-                    a = "0";
-                    b = "0";
+                    a = "";
+                    b = "";
                 }
                 a += str[str.length - 2];
             }
@@ -527,24 +531,35 @@ public class Controller  {
 
     public void oper(ActionEvent actionEvent) {
         char str[] = actionEvent.getTarget().toString().toCharArray();
-        if(b!="0"){
+        if (b != "") {
             result();
-            state = Character.toString(str[str.length - 2]);
-            textField.setText(textField.getText() + state);
         }
-        else {
+        if(state=="") {
             state = Character.toString(str[str.length - 2]);
             textField.setText(textField.getText() + state);
+
+        }
+        else{
+            System.out.println("okei");
         }
 
     }
+
     public void result() {
+        error1.setText("");
         switch (state){
             case "*" :
                 multiplition(a,b);
                 break;
             case "/" :
-                dele(a,b);
+                if(Integer.valueOf(b)!=0) {
+                    dele(a, b);
+                }
+                else{
+                    error1.setText("Нельзя делить на ноль");
+                    textField.setText(a+state);
+                    b="";
+                }
                 break;
             case "+" :
                 plus(a,b);
@@ -572,30 +587,33 @@ public class Controller  {
         System.out.println(actionEvent.getTarget());
         char str[]=actionEvent.getTarget().toString().toCharArray();
         System.out.println(str[str.length-2]);
-        if(stateBin=="0"){
-            textField2.setText(textField2.getText()+Character.toString(str[str.length-2]));
+        if(stateBin==""){
+            if(resBin!=0){
+                textField2.setText("");
+                resBin=0;
+                aBin="";
+                bBin="";
+            }
+            aBin+=str[str.length-2];
         }
         else{
-            textField2.setText(textField2.getText()+Character.toString(str[str.length-2]));
+            bBin+=str[str.length-2];
         }
+        textField2.setText(textField2.getText()+Character.toString(str[str.length-2]));
     }
 
-
     public void opertionBinary(ActionEvent actionEvent){
-        aBin=textField2.getText();
-        textField2.setText("");
-        System.out.println(actionEvent.getTarget());
+        //aBin=textField2.getText();
+       // textField2.setText("");
         char str[]=actionEvent.getTarget().toString().toCharArray();
         stateBin=Character.toString(str[str.length-2]);
-
+        textField2.setText(textField2.getText()+stateBin);
     }
 
     public void resultBin(ActionEvent actionEvent) {
-        bBin=textField2.getText();
+        //bBin=textField2.getText();
         char aArray[]=aBin.toCharArray();
         char bArray[]=bBin.toCharArray();
-        aBin="";
-        bBin="";
         switch (stateBin){
             //Сложения
             case "+" :
@@ -613,11 +631,9 @@ public class Controller  {
                 String result = "";
                 int f = 0, k = 0, g;
                 for (int i = 0; i < aArray.length; i++) {
-
                     f += Integer.valueOf(String.valueOf(aArray[i])) * (Math.pow(2, Integer.valueOf(aArray.length - 1 - i)));
                 }
                 for (int i = 0; i < bArray.length; i++) {
-
                     k += Integer.valueOf(String.valueOf(bArray[i])) * (Math.pow(2, Integer.valueOf(bArray.length - 1 - i)));
                 }
                 g = f / k;
@@ -634,11 +650,13 @@ public class Controller  {
                     }
                 }
                 textField2.setText(clearotnol(obratnyi(result)));
+                resBin=Double.valueOf(result);
                 break;
 
         }
-        stateBin="0";
+        stateBin="";
     }
+
     public void clearBin(ActionEvent actionEvent) {
         textField2.setText("");
         aBin="";
